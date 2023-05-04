@@ -6,7 +6,9 @@ import 'package:model_viewer_plus/model_viewer_plus.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+
+  ModelViewer aa = ModelViewer(src: 'assets/Defeated.glb');
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +16,9 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(title: const Text("Model Viewer")),
         body: ModelViewer(
+          scale: "1.4 2.0 1.8", //좌우 위아래 앞뒤
           backgroundColor: const Color.fromARGB(0xFF, 0xEE, 0xEE, 0xEE),
-          src: 'assets/Defeated.glb', // a bundled asset file
+          src: 'assets/3dAvatar.glb', // a bundled asset file
           alt: "A 3D model of an astronaut",
           ar: true,
           arModes: const ['scene-viewer', 'webxr', 'quick-look'],
