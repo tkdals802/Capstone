@@ -5,11 +5,11 @@ import 'package:model_viewer_plus/model_viewer_plus.dart';
 
 //void main() => runApp(const MyApp());
 
-class ModelScreen extends StatelessWidget {
-  int weight;
-  int height;
+class ModelScreen2 extends StatelessWidget {
+  double weight;
+  double height;
 
-  ModelScreen({required this.weight, required this.height, super.key});
+  ModelScreen2({required this.weight, required this.height, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +17,10 @@ class ModelScreen extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(title: const Text("Model Viewer")),
         body: ModelViewer(
-          scale: "1.4 $height $weight", //좌우 위아래 앞뒤
+          scale: "1.0 $height $weight", //좌우 위아래 앞뒤
           backgroundColor: Colors.white, // a bundled asset file
           alt: "A 3D model of an astrote",
-          src: 'assets/Defeated.glb',
+          src: 'assets/egg_girl.glb',
           ar: true,
           arModes: const ['scene-viewer', 'webxr', 'quick-look'],
           autoRotate: true,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'modelViewer.dart';
+import 'modelViewer_Man.dart';
+import 'modelViewer_Women.dart';
 
 void main() => runApp(const MyApp());
 
@@ -36,7 +37,7 @@ class signIn extends StatelessWidget {
                   children: const <Widget>[
                     CircleAvatar(
                         radius: 40.0,
-                        backgroundColor: Colors.white,
+                        backgroundColor: Colors.black38,
                         backgroundImage: AssetImage("images/is.png")),
                     SizedBox(
                       height: 2.0,
@@ -76,8 +77,9 @@ class secondSignIn extends StatefulWidget {
 }
 
 class _secondSignInState extends State<secondSignIn> {
-  int w = 0;
-  int h = 0;
+  double w = 0;
+  double h = 0;
+  String gender = "";
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -101,7 +103,7 @@ class _secondSignInState extends State<secondSignIn> {
                         ),
                         hintText: "몸무게를입력하세요"),
                     onChanged: (value) {
-                      w = int.parse(value);
+                      w = double.parse(value);
                     },
                   ),
                   TextFormField(
@@ -114,18 +116,76 @@ class _secondSignInState extends State<secondSignIn> {
                         ),
                         hintText: "키를입력하세요"),
                     onChanged: (value) {
-                      h = int.parse(value);
+                      h = double.parse(value);
                     },
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25)),
+                          backgroundColor: Colors.red,
+                          alignment: Alignment.centerLeft,
+                        ),
+                        child: const Text("남자"),
+                        onPressed: () {
+                          gender = "Man";
+                          h = 175 - h;
+                          h = 1 + h / 10;
+                        },
+                      ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25)),
+                          backgroundColor: Colors.red,
+                          alignment: Alignment.centerLeft,
+                        ),
+                        child: const Text("여자"),
+                        onPressed: () {
+                          gender = "Women";
+                          h = 165 - h;
+                          h = 1 + h / 10;
+                        },
+                      ),
+                    ],
                   ),
                   ElevatedButton(
                     child: const Text("완료"),
                     onPressed: () async {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                ModelScreen(weight: w, height: h)),
-                      );
+                      h = 175 - h;
+                      h = 1 + h / 10;
+                      w = w / h * h;
+                      if (w < 20) {
+                        //저체중
+                        w = 0.5;
+                      } else if (20 <= w && w <= 24) {
+                        //정상
+                        w = 1.0;
+                      } else if (25 <= w && w <= 29) {
+                        //과체중
+                        w = 1.5;
+                      } else {
+                        //비만
+                        w = 1.8;
+                      }
+                      if (gender == "Man") {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ModelScreen(weight: w, height: h)),
+                        );
+                      } else if (gender == "Women") {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ModelScreen2(weight: w, height: h)),
+                        );
+                      }
                     },
                   )
                 ],
