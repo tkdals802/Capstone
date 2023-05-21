@@ -123,12 +123,15 @@ class _secondSignInState extends State<secondSignIn> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25)),
-                          backgroundColor: Colors.red,
-                          alignment: Alignment.centerLeft,
-                        ),
+                        style: ButtonStyle(overlayColor:
+                            MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.pressed)) {
+                              return Colors.redAccent;
+                            }
+                            return null;
+                          },
+                        )),
                         child: const Text("남자"),
                         onPressed: () {
                           gender = "Man";
