@@ -26,9 +26,7 @@ class signIn extends StatelessWidget {
       home: Material(
         child: Stack(
           children: <Widget>[
-            const Image(
-              image: AssetImage("images/jh.png"),
-            ),
+            //const Image(image: AssetImage("images/jh.png"),),
             Container(
               padding:
                   const EdgeInsets.symmetric(horizontal: 90.0, vertical: 45.0),
@@ -36,9 +34,10 @@ class signIn extends StatelessWidget {
                 child: Column(
                   children: const <Widget>[
                     CircleAvatar(
-                        radius: 40.0,
-                        backgroundColor: Colors.black38,
-                        backgroundImage: AssetImage("images/is.png")),
+                      radius: 40.0,
+                      backgroundColor: Colors.black38,
+                      //backgroundImage: AssetImage("images/is.png")
+                    ),
                     SizedBox(
                       height: 2.0,
                     ),
@@ -79,6 +78,7 @@ class secondSignIn extends StatefulWidget {
 class _secondSignInState extends State<secondSignIn> {
   double w = 0;
   double h = 0;
+  double temp = 0;
   String gender = "";
   @override
   Widget build(BuildContext context) {
@@ -117,6 +117,7 @@ class _secondSignInState extends State<secondSignIn> {
                         hintText: "키를입력하세요"),
                     onChanged: (value) {
                       h = double.parse(value);
+                      temp = h;
                     },
                   ),
                   Row(
@@ -135,22 +136,26 @@ class _secondSignInState extends State<secondSignIn> {
                         child: const Text("남자"),
                         onPressed: () {
                           gender = "Man";
-                          h = 175 - h;
-                          h = 1 + h / 10;
+                          h = h - 170;
+                          h = 1.5 - 0.1 * h;
                         },
                       ),
+                      const SizedBox(width: 10),
                       ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25)),
-                          backgroundColor: Colors.red,
-                          alignment: Alignment.centerLeft,
-                        ),
+                        style: ButtonStyle(overlayColor:
+                            MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.pressed)) {
+                              return Colors.redAccent;
+                            }
+                            return null;
+                          },
+                        )),
                         child: const Text("여자"),
                         onPressed: () {
                           gender = "Women";
-                          h = 165 - h;
-                          h = 1 + h / 10;
+                          h = h - 160;
+                          h = 1.5 - 0.1 * h;
                         },
                       ),
                     ],
@@ -158,22 +163,25 @@ class _secondSignInState extends State<secondSignIn> {
                   ElevatedButton(
                     child: const Text("완료"),
                     onPressed: () async {
-                      h = 175 - h;
-                      h = 1 + h / 10;
-                      w = w / h * h;
-                      if (w < 20) {
+                      //h = 175 - h;
+                      //h = 1 + h / 10;
+                      w = w / ((temp / 100) * (temp / 100));
+                      if (w < 18.5) {
                         //저체중
                         w = 0.5;
-                      } else if (20 <= w && w <= 24) {
+                      } else if (18.5 <= w && w <= 23) {
                         //정상
                         w = 1.0;
-                      } else if (25 <= w && w <= 29) {
+                      } else if (23 <= w && w <= 25) {
                         //과체중
                         w = 1.5;
                       } else {
                         //비만
                         w = 1.8;
                       }
+
+                      print('h: $h');
+                      print('w: $w');
                       if (gender == "Man") {
                         Navigator.push(
                           context,
@@ -190,7 +198,10 @@ class _secondSignInState extends State<secondSignIn> {
                         );
                       }
                     },
-                  )
+                  ),
+                  Row(
+                    children: [Container()],
+                  ),
                 ],
               ),
             ),
