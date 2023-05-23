@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'modelViewer_Man.dart';
+import 'package:mvp/modelViewer_Man.dart';
 import 'modelViewer_Women.dart';
 
 void main() => runApp(const MyApp());
@@ -79,6 +79,8 @@ class _secondSignInState extends State<secondSignIn> {
   double w = 0;
   double h = 0;
   double temp = 0;
+  double real_h = 0;
+  double real_w = 0;
   String gender = "";
   @override
   Widget build(BuildContext context) {
@@ -104,6 +106,7 @@ class _secondSignInState extends State<secondSignIn> {
                         hintText: "몸무게를입력하세요"),
                     onChanged: (value) {
                       w = double.parse(value);
+                      real_w = w;
                     },
                   ),
                   TextFormField(
@@ -118,6 +121,7 @@ class _secondSignInState extends State<secondSignIn> {
                     onChanged: (value) {
                       h = double.parse(value);
                       temp = h;
+                      real_h = h;
                     },
                   ),
                   Row(
@@ -136,8 +140,8 @@ class _secondSignInState extends State<secondSignIn> {
                         child: const Text("남자"),
                         onPressed: () {
                           gender = "Man";
-                          h = h - 170;
-                          h = 1.5 - 0.1 * h;
+                          print('w $w');
+                          print('h $h');
                         },
                       ),
                       const SizedBox(width: 10),
@@ -154,8 +158,8 @@ class _secondSignInState extends State<secondSignIn> {
                         child: const Text("여자"),
                         onPressed: () {
                           gender = "Women";
-                          h = h - 160;
-                          h = 1.5 - 0.1 * h;
+                          print('w $w');
+                          print('h $h');
                         },
                       ),
                     ],
@@ -163,7 +167,76 @@ class _secondSignInState extends State<secondSignIn> {
                   ElevatedButton(
                     child: const Text("완료"),
                     onPressed: () async {
-                      NextPage();
+                      double bmi = 0;
+                      bmi = real_w / ((temp / 100) * (temp / 100));
+
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            if (bmi < 15) {
+                              return AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0)),
+                                content: const Text('너무 말랐어요'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: const Text('확인'),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ],
+                              );
+                            } else if (bmi > 30) {
+                              return AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0)),
+                                content: const Text('너무 뚱뚱해요'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: const Text('확인'),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ],
+                              );
+                            } else {
+                              if (bmi < 20) {
+                                //저체중
+                                w = 0.5;
+                              } else if (20 <= bmi && bmi <= 24) {
+                                //정상
+                                w = 1.0;
+                              } else if (25 <= bmi && bmi <= 29) {
+                                //과체중
+                                w = 1.5;
+                              } else {
+                                //비만
+                                w = 1.8;
+                              }
+                              /*
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ModelScreen2(weight: w, height: h)),
+            );
+            */
+                              print('w $w');
+                              print('h $h');
+                              if (gender == "Man") {
+                                h = real_h;
+                                h = h - 170;
+                                h = 1.5 - 0.1 * h;
+                                return ModelScreen(weight: w, height: h);
+                              } else {
+                                h = real_h;
+                                h = h - 160;
+                                h = 1.5 - 0.1 * h;
+                                return ModelScreen2(weight: w, height: h);
+                              }
+                            }
+                          });
                     },
                   ),
                   Row(
@@ -178,49 +251,5 @@ class _secondSignInState extends State<secondSignIn> {
     );
   }
 
-  void NextPage() {
-    //h = 175 - h;
-    //h = 1 + h / 10;
-    if (gender == 'Man' && h < 160) {
-      AlertDialog(title: const Text('키가 너무 작아요'), actions: <Widget>[
-        TextButton(
-          child: const Text('Close'),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ]);
-    }
-
-    w = w / ((temp / 100) * (temp / 100));
-    if (w < 18.5) {
-      //저체중
-      w = 0.5;
-    } else if (18.5 <= w && w <= 23) {
-      //정상
-      w = 1.0;
-    } else if (23 <= w && w <= 25) {
-      //과체중
-      w = 1.5;
-    } else {
-      //비만
-      w = 1.8;
-    }
-
-    print('h: $h');
-    print('w: $w');
-    if (gender == "Man") {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ModelScreen(weight: w, height: h)),
-      );
-    } else if (gender == "Women") {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ModelScreen2(weight: w, height: h)),
-      );
-    }
-  }
+  dynamic nextPage() {}
 }
