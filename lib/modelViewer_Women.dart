@@ -17,10 +17,10 @@ class ModelScreen2 extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(title: const Text("Model Viewer")),
         body: ModelViewer(
-          scale: "1.0 $height $weight", //좌우 위아래 앞뒤
+          scale: "$height 1.0 $weight", //좌우 위아래 앞뒤
           backgroundColor: Colors.white, // a bundled asset file
           alt: "A 3D model of an astrote",
-          src: 'assets/egg_girl.glb',
+          src: 'assets/yellow_girl.glb',
           ar: true,
           arModes: const ['scene-viewer', 'webxr', 'quick-look'],
           autoRotate: true,

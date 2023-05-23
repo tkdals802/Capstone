@@ -49,7 +49,7 @@ class signIn extends StatelessWidget {
                           fontSize: 40.0),
                     ),
                     Text(
-                      "\n키와\n 몸무게를 \n입력해보거라\n",
+                      "\n키와\n 몸무게를 \n입력해주세요\n",
                       style: TextStyle(
                           fontFamily: "Bamin",
                           color: Colors.red,
@@ -163,40 +163,7 @@ class _secondSignInState extends State<secondSignIn> {
                   ElevatedButton(
                     child: const Text("완료"),
                     onPressed: () async {
-                      //h = 175 - h;
-                      //h = 1 + h / 10;
-                      w = w / ((temp / 100) * (temp / 100));
-                      if (w < 18.5) {
-                        //저체중
-                        w = 0.5;
-                      } else if (18.5 <= w && w <= 23) {
-                        //정상
-                        w = 1.0;
-                      } else if (23 <= w && w <= 25) {
-                        //과체중
-                        w = 1.5;
-                      } else {
-                        //비만
-                        w = 1.8;
-                      }
-
-                      print('h: $h');
-                      print('w: $w');
-                      if (gender == "Man") {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  ModelScreen(weight: w, height: h)),
-                        );
-                      } else if (gender == "Women") {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  ModelScreen2(weight: w, height: h)),
-                        );
-                      }
+                      NextPage();
                     },
                   ),
                   Row(
@@ -209,5 +176,51 @@ class _secondSignInState extends State<secondSignIn> {
         ],
       ),
     );
+  }
+
+  void NextPage() {
+    //h = 175 - h;
+    //h = 1 + h / 10;
+    if (gender == 'Man' && h < 160) {
+      AlertDialog(title: const Text('키가 너무 작아요'), actions: <Widget>[
+        TextButton(
+          child: const Text('Close'),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ]);
+    }
+
+    w = w / ((temp / 100) * (temp / 100));
+    if (w < 18.5) {
+      //저체중
+      w = 0.5;
+    } else if (18.5 <= w && w <= 23) {
+      //정상
+      w = 1.0;
+    } else if (23 <= w && w <= 25) {
+      //과체중
+      w = 1.5;
+    } else {
+      //비만
+      w = 1.8;
+    }
+
+    print('h: $h');
+    print('w: $w');
+    if (gender == "Man") {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ModelScreen(weight: w, height: h)),
+      );
+    } else if (gender == "Women") {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ModelScreen2(weight: w, height: h)),
+      );
+    }
   }
 }
